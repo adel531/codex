@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yandex SERP Analyzer</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div>
+        <h1>Yandex SERP Analyzer</h1>
+        <p class="subtitle">Анализируйте выдачу Яндекса прямо в боковой панели.</p>
+      </div>
+      <button id="run-analysis" class="primary">Обновить</button>
+    </header>
+
+    <section class="summary" id="summary">
+      <div class="summary-card">
+        <span class="label">Результатов</span>
+        <span class="value" id="summary-total">—</span>
+      </div>
+      <div class="summary-card">
+        <span class="label">Средн. длина title</span>
+        <span class="value" id="summary-title">—</span>
+      </div>
+      <div class="summary-card">
+        <span class="label">Средн. длина сниппета</span>
+        <span class="value" id="summary-snippet">—</span>
+      </div>
+    </section>
+
+    <section class="filters">
+      <label>
+        Доменная зона
+        <select id="filter-tld">
+          <option value="all">Все</option>
+        </select>
+      </label>
+      <label>
+        Сниппеты
+        <select id="filter-snippet">
+          <option value="all">Все</option>
+          <option value="sitelinks">Быстрые ссылки</option>
+          <option value="image">Картинки</option>
+          <option value="video">Видео</option>
+          <option value="faq">FAQ/Ответы</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="actions">
+      <button id="copy-table" class="secondary">Копировать таблицу</button>
+      <button id="export-csv" class="secondary">Экспорт CSV</button>
+    </section>
+
+    <section class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>URL</th>
+            <th>Домен</th>
+            <th>Длина title</th>
+            <th>Длина сниппета</th>
+            <th>Сниппеты</th>
+          </tr>
+        </thead>
+        <tbody id="results-body"></tbody>
+      </table>
+    </section>
+
+    <footer class="footer" id="status"></footer>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>
