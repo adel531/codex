@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "description": "Analyze Yandex SERP results and export key metrics.",
   "action": {
-    "default_title": "Yandex SERP Analyzer"
+    "default_title": "Yandex SERP Analyzer",
+    "default_popup": "sidepanel.html"
   },
   "icons": {
     "16": "icon.svg",
@@ -24,9 +25,6 @@
     "https://yandex.com.tr/*",
     "https://ya.ru/*"
   ],
-  "side_panel": {
-    "default_path": "sidepanel.html"
-  },
   "content_scripts": [
     {
       "matches": [
