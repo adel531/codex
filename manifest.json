@@ -18,19 +18,11 @@
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": [
     "https://yandex.ru/*",
-    "https://*.yandex.ru/*",
     "https://yandex.com/*",
-    "https://*.yandex.com/*",
     "https://yandex.kz/*",
-    "https://*.yandex.kz/*",
     "https://yandex.by/*",
-    "https://*.yandex.by/*",
-    "https://yandex.ua/*",
-    "https://*.yandex.ua/*",
     "https://yandex.com.tr/*",
-    "https://*.yandex.com.tr/*",
-    "https://ya.ru/*",
-    "https://*.ya.ru/*"
+    "https://ya.ru/*"
   ],
   "side_panel": {
     "default_path": "sidepanel.html"
@@ -39,19 +31,11 @@
     {
       "matches": [
         "https://yandex.ru/*",
-        "https://*.yandex.ru/*",
         "https://yandex.com/*",
-        "https://*.yandex.com/*",
         "https://yandex.kz/*",
-        "https://*.yandex.kz/*",
         "https://yandex.by/*",
-        "https://*.yandex.by/*",
-        "https://yandex.ua/*",
-        "https://*.yandex.ua/*",
         "https://yandex.com.tr/*",
-        "https://*.yandex.com.tr/*",
-        "https://ya.ru/*",
-        "https://*.ya.ru/*"
+        "https://ya.ru/*"
       ],
       "js": ["content.js"]
     }
