@@ -29,7 +29,8 @@ const getDomain = (url) => {
   }
 };
 
-const isBlockedDomain = (url) => getDomain(url) === "yabs.yandex.ru";
+const BLOCKED_DOMAINS = new Set(["yabs.yandex.ru", "alice.yandex.ru"]);
+const isBlockedDomain = (url) => BLOCKED_DOMAINS.has(getDomain(url));
 
 const isPromoted = (item) => {
   const labels = Array.from(item.querySelectorAll(SERP_SELECTORS.promoLabel));
