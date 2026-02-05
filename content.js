@@ -3,6 +3,8 @@ const SERP_SELECTORS = {
   title: "h2 a, .OrganicTitle-Link, a.Link",
   snippet:
     ".OrganicText, .text-container, .TextContainer, .text, .organic__subtitle",
+  promoLabel:
+    ".Label, .LabelText, .label, .serp-item__label, .OrganicLabel, .Label_type_promo, .label_type_promo",
   sitelinks: ".sitelinks, .Sitelinks, .LinksGroup",
   imageSnippet: ".serp-item__thumb, .Thumb-Image, img",
   videoSnippet: ".VideoSnippet, .video, .thumb-video, .OrganicVideo",
@@ -11,6 +13,13 @@ const SERP_SELECTORS = {
 
 const normalizeText = (value) => (value || "").replace(/\s+/g, " ").trim();
 
+const stripUrlPrefix = (text) => {
+  const cleaned = text
+    .replace(/^[^\s]+›[^\s]+\s*/i, "")
+    .replace(/^[\w.-]+\.[a-z]{2,}(?:\/[^\s]+)?\s*/i, "");
+  return normalizeText(cleaned);
+};
+
 const getDomain = (url) => {
   try {
     const parsed = new URL(url);
@@ -18,6 +27,11 @@ const getDomain = (url) => {
   } catch (error) {
     return "";
   }
+};
+
+const isPromoted = (item) => {
+  const labels = Array.from(item.querySelectorAll(SERP_SELECTORS.promoLabel));
+  return labels.some((label) => /промо/i.test(label.textContent || ""));
 };
 
 const detectSnippetTypes = (item) => {
@@ -41,11 +55,14 @@ const collectSerpResults = () => {
   const items = Array.from(document.querySelectorAll(SERP_SELECTORS.resultItem));
   const results = items
     .map((item) => {
+      if (isPromoted(item)) {
+        return null;
+      }
       const titleEl = item.querySelector(SERP_SELECTORS.title);
       const url = titleEl?.getAttribute("href") || "";
       const title = normalizeText(titleEl?.textContent);
       const snippetEl = item.querySelector(SERP_SELECTORS.snippet);
-      const snippet = normalizeText(snippetEl?.textContent);
+      const snippet = stripUrlPrefix(snippetEl?.textContent || "");
       if (!title || !url) {
         return null;
       }
