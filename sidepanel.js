@@ -7,6 +7,7 @@ const tldFilter = document.getElementById("filter-tld");
 const snippetFilter = document.getElementById("filter-snippet");
 
 let latestPayload = null;
+const selectedUrls = new Set();
 
 const setStatus = (text) => {
   statusEl.textContent = text;
@@ -73,17 +74,62 @@ const renderResults = (payload) => {
   const filtered = payload.results.filter(matchesFilters);
   filtered.forEach((result, index) => {
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${result.title}</td>
-      <td><a href="${result.url}" target="_blank" rel="noreferrer">${result.url}</a></td>
-      <td>${result.domain}</td>
-      <td>${result.titleLength}</td>
-      <td>${result.snippetLength}</td>
-      <td>${result.snippetTypes
-        .map((type) => `<span class="tag">${type}</span>`)
-        .join("")}</td>
-    `;
+    const indexCell = document.createElement("td");
+    indexCell.textContent = String(index + 1);
+
+    const selectCell = document.createElement("td");
+    selectCell.className = "select-cell";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = selectedUrls.has(result.url);
+    checkbox.addEventListener("change", (event) => {
+      if (event.target.checked) {
+        selectedUrls.add(result.url);
+      } else {
+        selectedUrls.delete(result.url);
+      }
+    });
+    selectCell.appendChild(checkbox);
+
+    const titleCell = document.createElement("td");
+    titleCell.textContent = result.title;
+
+    const descriptionCell = document.createElement("td");
+    descriptionCell.textContent = result.snippet || "—";
+
+    const urlCell = document.createElement("td");
+    const link = document.createElement("a");
+    link.href = result.url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = result.url;
+    urlCell.appendChild(link);
+
+    const domainCell = document.createElement("td");
+    domainCell.textContent = result.domain;
+
+    const titleLengthCell = document.createElement("td");
+    titleLengthCell.textContent = String(result.titleLength);
+
+    const snippetLengthCell = document.createElement("td");
+    snippetLengthCell.textContent = String(result.snippetLength);
+
+    const snippetTypesCell = document.createElement("td");
+    snippetTypesCell.innerHTML = result.snippetTypes
+      .map((type) => `<span class="tag">${type}</span>`)
+      .join("");
+
+    row.append(
+      indexCell,
+      selectCell,
+      titleCell,
+      descriptionCell,
+      urlCell,
+      domainCell,
+      titleLengthCell,
+      snippetLengthCell,
+      snippetTypesCell
+    );
     resultsBody.appendChild(row);
   });
 
@@ -137,7 +183,9 @@ const exportCsv = () => {
   }
   const headers = [
     "#",
+    "Selected",
     "Title",
+    "Description",
     "URL",
     "Domain",
     "Title length",
@@ -146,7 +194,9 @@ const exportCsv = () => {
   ];
   const rows = latestPayload.results.map((result, index) => [
     index + 1,
+    selectedUrls.has(result.url) ? "yes" : "no",
     result.title,
+    result.snippet,
     result.url,
     result.domain,
     result.titleLength,
@@ -174,12 +224,14 @@ const copyTable = async () => {
   }
   const rows = latestPayload.results.map(
     (result, index) =>
-      `${index + 1}\t${result.title}\t${result.url}\t${result.domain}\t${
+      `${index + 1}\t${selectedUrls.has(result.url) ? "yes" : "no"}\t${
+        result.title
+      }\t${result.snippet}\t${result.url}\t${result.domain}\t${
         result.titleLength
       }\t${result.snippetLength}\t${result.snippetTypes.join("|")}`
   );
   const header =
-    "#\tTitle\tURL\tDomain\tTitle length\tSnippet length\tSnippet types";
+    "#\tSelected\tTitle\tDescription\tURL\tDomain\tTitle length\tSnippet length\tSnippet types";
   await navigator.clipboard.writeText([header, ...rows].join("\n"));
   setStatus("Таблица скопирована в буфер.");
 };

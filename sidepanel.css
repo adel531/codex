@@ -120,6 +120,15 @@ td {
   vertical-align: top;
 }
 
+.select-cell {
+  text-align: center;
+  width: 32px;
+}
+
+.select-cell input {
+  cursor: pointer;
+}
+
 th {
   background: #f1f5f9;
   font-weight: 600;
