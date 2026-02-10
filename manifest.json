@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Yandex SERP Analyzer",
+  "version": "0.1.0",
+  "description": "Analyze Yandex SERP results and export key metrics.",
+  "action": {
+    "default_title": "Yandex SERP Analyzer",
+    "default_popup": "sidepanel.html"
+  },
+  "icons": {
+    "16": "icon.svg",
+    "32": "icon.svg",
+    "48": "icon.svg",
+    "128": "icon.svg"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "https://yandex.ru/*",
+    "https://yandex.com/*",
+    "https://yandex.kz/*",
+    "https://yandex.by/*",
+    "https://yandex.com.tr/*",
+    "https://ya.ru/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://yandex.ru/*",
+        "https://yandex.com/*",
+        "https://yandex.kz/*",
+        "https://yandex.by/*",
+        "https://yandex.com.tr/*",
+        "https://ya.ru/*"
+      ],
+      "js": ["content.js"]
+    }
+  ]
+}
